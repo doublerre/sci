@@ -1,0 +1,150 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+    Detalles de Centro de Investigación
+{% endblock titulo %}
+
+{% block headers %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style>
+        #map{
+            height: 400px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+    </style>
+
+{% endblock headers %}
+
+{% block contenido %}
+    <div class = "row">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h1>Detalles sobre {{centros.nombre}}</h1>
+            <a class="btn btn-danger btn-sm" href="{% url 'centros_lista' %}">Regresar</a>
+        </div>
+    </div>
+    <div class = "table-responsive-sm">
+        <h6><b>Datos del Centro/Laboratorio:</b></h6>
+        <table class = "table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Area de Investigación</th>
+                <th>Subarea</th>
+                <th>Página</th>
+                <th>Imagen</th>
+                <th>Logo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{centros.nombre}}</td>
+                <td>
+                    {{centros.calle}},
+                    {{centros.colonia}},
+                    {{centros.numExterior}},
+                    {{centros.cp}},
+                    {{centros.estado}},
+                    {{centros.municipio}}
+                </td>
+                <td>{{centros.telefono}}</td>
+                <td>{{centros.areaEnfoque}}</td>     
+                <td>{{centros.subAreaEnfoque}}</td>     
+                {% if centros.sitioWeb %}
+                    <td><a href = "https://{{centros.sitioWeb}}" target = "_blank">{{centros.sitioWeb}}</a></td>
+                {% else %}
+                    <td>No cuenta con sitio web</td>    
+                {% endif %}
+                    
+                <td>
+                    {% if centros.imagen %}
+                        <img src = "{{centros.imagen.url}}" width = 100% alt = ""/>
+                    {% else %}
+                        <p>No existe imagen del centro de investigacion</p>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if centros.logotipo %}
+                        <img src = "{{centros.logotipo.url}}" width = 100% alt = ""/>
+                    {% else %}
+                        <p>No existe logo del centro de investigacion</p>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <p></p>
+
+    <div class="table-responsive-sm">
+        <h6><b>Datos del Contaco(Responsable):</b></h6>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>{{centros.nombreEncargado}}</td>
+                    <td>{{centros.correoEncargado}}</td>
+                    <td>{{centros.telefonoEncargado}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class = "table-responsive-sm">
+        <h2>Ubicación Geográfica</h2>
+        <div id = "map"></div>    
+    </div>
+{% endblock contenido %}
+
+{% block scripts %}
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap&v=weekly"
+    async
+></script>
+<script>
+
+    let marker;
+
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: {{centros.latitud}}, lng: {{centros.longitud}} },
+          zoom: 16
+        });
+    
+
+        marker = new google.maps.Marker({
+            map,
+            draggable: false,
+            animation: google.maps.Animation.BOUNCE,
+            position: { lat: {{centros.latitud}}, lng: {{centros.longitud}} },
+        });
+        marker.addListener("dragend", toggleBounce);
+    }
+
+    function toggleBounce() {
+
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        $('#id_latitud').val(marker.position.lat);
+        $('#id_longitud').val(marker.position.lng);
+
+    }
+    
+    window.initMap = initMap;
+
+</script>    
+    
+
+{% endblock scripts %}

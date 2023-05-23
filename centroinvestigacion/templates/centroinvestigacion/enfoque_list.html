@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+    Lista de Enfoques
+{% endblock titulo %}
+
+{% block contenido %}
+    <div class="row">
+        <div class="col">
+            <h2>Enfoques de los Centros de Investigación del Estado de Zacatecas</h2>
+        </div>
+        <div class="col">
+            <a class = "btn btn-success btn-sm" href="{% url 'nuevo_enfoque' %}">Nuevo</a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class = "alert alert-danger">
+                    {{message}}
+                </div>
+            {% else %}
+                <div class = "alert alert-success">
+                    {{message}}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <table class = "table table-striped">
+        <thead>
+            <tr>
+                <th>Area</th>
+                <th>Subarea</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enfoque in object_list %}
+                <tr>
+                    <td>{{enfoque.area}}</td>
+                    <td>{{enfoque.subarea}}</td>
+                    <td>
+                        {% if enfoque.descripcion %}
+                            {{enfoque.descripcion}}
+                        {% else %}
+                            No cuenta con descripción
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class= "btn btn-primary btn-sm" href="{% url 'editar_enfoque' enfoque.id %}">Editar</a>
+                        <a class = "btn btn-danger btn-sm" href="{% url 'eliminar_enfoque' enfoque.id %}">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">
+                        <p>No existen enfoques registrados</p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock contenido %}

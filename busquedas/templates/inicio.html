@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang='es'>
+    <head>
+        <title>
+            {% block titulo %}
+
+            {% endblock titulo %}
+        </title>
+        <meta charset='utf-8' />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content='' name='description' />
+        <meta content='' name='author' />
+        <link rel="icon" href="{% static 'build/images/icono.ico' %}" type="image/ico" />
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+        <link rel="stylesheet" href="{% static 'vendors/bootstrap/dist/js/bootstrap.js' %}"/>
+        <!------ Include the above in your HEAD tag ---------->
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+
+        {% block headers %}
+
+        {% endblock headers %}
+
+    </head>
+
+    <body>
+
+        {% block contenido %}
+
+        {% endblock contenido %}
+
+        {% block scripts %}
+
+        {% endblock scripts %}
+    </body>
+</html>
